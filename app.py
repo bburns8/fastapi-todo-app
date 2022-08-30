@@ -50,3 +50,4 @@ def add(req: Request, todo_id: int, db: Session = Depends(get_db)):
     db.commit()
     url = app.url_path_for("home")
     return RedirectResponse(url=url, status_code=status.HTTP_303_SEE_OTHER)
+
