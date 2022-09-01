@@ -13,26 +13,30 @@ templates = Jinja2Templates(directory="templates")
 
 app = FastAPI()
 
+
 # Dependency
 def get_db():
     db = SessionLocal()
-    try: 
+    try:
         yield db
     finally:
         db.close()
 
+
 @app.get("/")
 async def home(req: Request, db: Session = Depends(get_db)):
     todos = db.query(models.Todo).all()
-    return templates.TemplateResponse("base.html", { "request": req, "todo_list": todos })
+    return templates.TemplateResponse("base.html", {"request": req, "todo_list": todos})
+
 
 @app.post("/add")
-def add(req: Request, title: str = Form(...), db: Session = Depends(get_db)):
-    new_todo = models.Todo(title=title)
+def add(req: Request, title: str = Form(...), note: str = Form(...), db: Session = Depends(get_db)):
+    new_todo = models.Todo(title=title, note=note)
     db.add(new_todo)
     db.commit()
     url = app.url_path_for("home")
     return RedirectResponse(url=url, status_code=status.HTTP_303_SEE_OTHER)
+
 
 @app.get("/update/{todo_id}")
 def add(req: Request, todo_id: int, db: Session = Depends(get_db)):
@@ -50,4 +54,3 @@ def add(req: Request, todo_id: int, db: Session = Depends(get_db)):
     db.commit()
     url = app.url_path_for("home")
     return RedirectResponse(url=url, status_code=status.HTTP_303_SEE_OTHER)
-
