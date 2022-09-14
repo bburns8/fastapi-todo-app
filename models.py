@@ -1,9 +1,13 @@
-from sqlalchemy import Boolean, Column, Integer, String
+from sqlalchemy import Column, Integer, Boolean, Text
 from database import Base
 
-class Todo(Base):
-    __tablename__ = "todos"
 
+class Todo(Base):
+    __tablename__ = 'todos'
     id = Column(Integer, primary_key=True)
-    title = Column(String(100))
-    complete = Column(Boolean, default=False)
+    task = Column(Text)
+    note = Column(Text)
+    completed = Column(Boolean, default=False)
+
+    def __repr__(self):
+        return '<Todo %r>' % (self.id)
