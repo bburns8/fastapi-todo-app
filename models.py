@@ -7,7 +7,8 @@ class Todo(Base):
     id = Column(Integer, primary_key=True)
     task = Column(Text)
     note = Column(Text)
-    completed = Column(Boolean, default=False)
-
+    created_date = Column(Date)
+    due_date = Column(Date)
+    
     def __repr__(self):
         return '<Todo %r>' % (self.id)
